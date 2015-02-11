@@ -27,7 +27,7 @@
 	var league_hyou = ""; //リーグ表大元
 	var i,j,k;
 	var members = [];
-	var id_count = 0;
+	var id_count = 0,c_count = 0;
 
 	//----------------------------
 	//小物
@@ -35,6 +35,9 @@
 	
 	function $(id) {
 		return document.getElementById(id);
+	}
+	function c$(id) {
+		return document.getElementByClassName(id);
 	}
 	function br() {
 		league_hyou += "<br />";
@@ -78,7 +81,8 @@
 		ninzu = members.length;
 		league_hyou = "";
 		slash_count = ninzu - 1;
-		id_count = 0;
+		id_count = 1;
+		kara1 = ninzu ;
 
 		for( j = 0 ; j < 4 ; j++ ){
 
@@ -94,24 +98,31 @@
 		}
 		
 		for ( i = 0 ; i < ninzu ; i++){
+			c_count = kara1*kara1 - i;
 			for ( j = 0 ; j < 2 ; j++){
 				for ( k = 0 ; k < ninzu ; k++){
 					
 					if ( j == 0 && k == slash_count ){
 						league_hyou += slash;
 						slash_count -= 1;
+						id_count += 1;
+						c_count -= kara1;
+
 					}else{
 						if ( j === 0 ){
 							league_hyou += "│";
-							league_hyou += '<a id="number' +id_count+ '" onclick="vic_or_def('+id_count+')">';
+							league_hyou += '<a id="number' +id_count+ '" class="'+c_count+'" onclick="vic_or_def('+id_count+')">';
 							league_hyou += "＿";
 							league_hyou += "</a>";
+							id_count += 1;
+							c_count -= kara1;
+
+
 						}
 						if ( j === 1){
 							league_hyou += keisen2[j];
 						}
 					}
-					id_count += 1;
 
 				}
 				if ( j == 0 ) {league_hyou += keisen4;}
@@ -157,10 +168,11 @@
 	
 	
 	function vic_or_def(n) {//http://d.hatena.ne.jp/hichame/20090730/1248915884
-		if ( $('number'+n+'').innerHTML === "＿" ){$('number'+n+'').innerHTML = "○";}
-		else if ( $('number'+n+'').innerHTML === "○" ) {$('number'+n+'').innerHTML = "●";}
-		else if ( $('number'+n+'').innerHTML === "●" ) {$('number'+n+'').innerHTML = "△";}
-		else if ( $('number'+n+'').innerHTML === "△" ) {$('number'+n+'').innerHTML = "＿" }
+		f = parseInt($('number'+n+'').getAttribute('class'));
+		if ( $('number'+n+'').innerHTML === "＿" ){$('number'+n+'').innerHTML = "○"; $('number'+f+'').innerHTML = "●";}
+		else if ( $('number'+n+'').innerHTML === "○" ) {$('number'+n+'').innerHTML = "●"; $('number'+f+'').innerHTML = "○";}
+		else if ( $('number'+n+'').innerHTML === "●" ) {$('number'+n+'').innerHTML = "△"; $('number'+f+'').innerHTML = "△";}
+		else if ( $('number'+n+'').innerHTML === "△" ) {$('number'+n+'').innerHTML = "＿" ; $('number'+f+'').innerHTML = "＿";}
 		return false
 	}
 	
