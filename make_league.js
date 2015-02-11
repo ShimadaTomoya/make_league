@@ -10,6 +10,7 @@
 	・山田祥寛『JacaScript本格入門』（2010,技術評論社）
 	・https://dl.dropboxusercontent.com/u/27191410/t/tournament.html
 	・http://www.openspc2.org/reibun/javascript/string/026/
+	・http://blog.webcreativepark.net/2007/08/01-135601.html
 	*/
 	
 	//----------------------------
@@ -26,6 +27,7 @@
 	var league_hyou = ""; //リーグ表大元
 	var i,j,k;
 	var members = [];
+	var id_count = 0;
 
 	//----------------------------
 	//小物
@@ -76,9 +78,10 @@
 		ninzu = members.length;
 		league_hyou = "";
 		slash_count = ninzu - 1;
+		id_count = 0;
 
 		for( j = 0 ; j < 4 ; j++ ){
-		
+
 			for( i = 0 ; i < ninzu ; i++){
 				league_hyou += keisen1[j] ;
 			}
@@ -97,10 +100,19 @@
 					if ( j == 0 && k == slash_count ){
 						league_hyou += slash;
 						slash_count -= 1;
+					}else{
+						if ( j === 0 ){
+							league_hyou += "│";
+							league_hyou += '<a id="number' +id_count+ '" onclick="vic_or_def('+id_count+')">';
+							league_hyou += "＿";
+							league_hyou += "</a>";
+						}
+						if ( j === 1){
+							league_hyou += keisen2[j];
+						}
 					}
-					else{
-						league_hyou += keisen2[j];
-					}
+					id_count += 1;
+
 				}
 				if ( j == 0 ) {league_hyou += keisen4;}
 				if ( j == 1 ) {league_hyou += keisen3;}
@@ -120,7 +132,7 @@
 		
 	}
 	
-	//半角文字列なら半角スペース追加（ズレ対策）
+	//半角文字列なら半角スペースを追加（ズレ対策）
 	function getByte(word) {//http://www.openspc2.org/reibun/javascript/string/026/
 		n = escape(word);
 		if ( n.length < 4 ){
@@ -130,7 +142,7 @@
 			return word;
 		}
 	}
-
+	
 	function draw(){
 		$('area').innerHTML = league_hyou;
 	}
@@ -143,4 +155,14 @@
 		draw();
 	}
 	
+	
+	function vic_or_def(n) {//http://d.hatena.ne.jp/hichame/20090730/1248915884
+		if ( $('number'+n+'').innerHTML === "＿" ){$('number'+n+'').innerHTML = "○";}
+		else if ( $('number'+n+'').innerHTML === "○" ) {$('number'+n+'').innerHTML = "●";}
+		else if ( $('number'+n+'').innerHTML === "●" ) {$('number'+n+'').innerHTML = "△";}
+		else if ( $('number'+n+'').innerHTML === "△" ) {$('number'+n+'').innerHTML = "＿" }
+		return false
+	}
+	
 	document.make = make;
+	document.vic_or_def = vic_or_def;
