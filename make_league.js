@@ -65,6 +65,9 @@
 	
 	function member_update() {
         members = cano($('member').value.split("\n"));
+        for (i = 0;i < members.length;i++){
+        	if (members[i].length <= 1){members[i]+="　"}
+        }
         return;
     }
     
@@ -147,6 +150,17 @@
 		
 	}
 	
+	//半角文字列なら半角スペースを追加（ズレ対策）
+	function getByte(word) {//http://www.openspc2.org/reibun/javascript/string/026/
+		n = escape(word);
+		if ( n.length < 4 || word == " "){
+			return word + "&nbsp;";
+		}
+		else{
+			return word;
+		}
+	}
+	
 	function wl_records(){//勝ち数、負け数を追加
 		var n = ninzu * ninzu,
 			win=[],
@@ -165,16 +179,7 @@
 		
 	}
 	
-	//半角文字列なら半角スペースを追加（ズレ対策）
-	function getByte(word) {//http://www.openspc2.org/reibun/javascript/string/026/
-		n = escape(word);
-		if ( n.length < 4 ){
-			return word + " ";
-		}
-		else{
-			return word;
-		}
-	}
+
 	
 	function draw(){
 		$('area').innerHTML = league_hyou;
