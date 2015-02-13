@@ -28,6 +28,7 @@
 	var i,j,k;
 	var members = [];
 	var id_count = 0,c_count = 0;
+	var ninzu;
 
 	//----------------------------
 	//小物
@@ -82,7 +83,6 @@
 		league_hyou = "";
 		slash_count = ninzu - 1;
 		id_count = 1;
-		kara1 = ninzu ;
 
 		for( j = 0 ; j < 4 ; j++ ){
 
@@ -98,15 +98,16 @@
 		}
 		
 		for ( i = 0 ; i < ninzu ; i++){
-			c_count = kara1*kara1 - i;
+			c_count = ninzu*ninzu - i;
 			for ( j = 0 ; j < 2 ; j++){
 				for ( k = 0 ; k < ninzu ; k++){
 					
 					if ( j == 0 && k == slash_count ){
 						league_hyou += slash;
+						league_hyou += '<a id="number' +id_count+ '"></a>' 
 						slash_count -= 1;
 						id_count += 1;
-						c_count -= kara1;
+						c_count -= ninzu;
 
 					}else{
 						if ( j === 0 ){
@@ -115,7 +116,7 @@
 							league_hyou += "＿";
 							league_hyou += "</a>";
 							id_count += 1;
-							c_count -= kara1;
+							c_count -= ninzu;
 
 
 						}
@@ -125,7 +126,10 @@
 					}
 
 				}
-				if ( j == 0 ) {league_hyou += keisen4;}
+				if ( j == 0 ) {
+					league_hyou += "│"+'<span id="katisu'+i+'">'+"＿"+"</span>"+"－"+'<span id="makesu'+i+'">'+"＿"+"</span>"+"│namae";
+					
+				}
 				if ( j == 1 ) {league_hyou += keisen3;}
 				
 				br();
@@ -140,6 +144,24 @@
 			league_hyou = league_hyou.replace(/itimojime/i,getByte(members[ninzu - i -1].slice(0,1)));
 			league_hyou = league_hyou.replace(/nimojime/i,getByte(members[ninzu - i -1].slice(1,2)));
 		}
+		
+	}
+	
+	function wl_records(){//勝ち数、負け数を追加
+		var n = ninzu * ninzu,
+			win=[],
+			lose=[];
+		
+		for ( i = 0 ; i < ninzu ; i++){win[i] = 0;lose[i] = 0;}
+		for ( j = 1; j <= n ; j++){
+			if ( $('number'+j+'').innerHTML === "○" ){win[Math.floor((j-1)/ninzu)] += 1;}
+			if ( $('number'+j+'').innerHTML === "●" ){lose[Math.floor((j-1)/ninzu)] += 1;}
+		}
+		for ( i = 0 ; i < ninzu ; i++){
+			$('katisu'+i+'').innerHTML = ( win[i] >= 10 ) ? win[i] : win[i] + " "; 
+			$('makesu'+i+'').innerHTML = ( lose[i] >= 10 ) ? lose[i] : lose[i] + " ";
+		}
+		return true;
 		
 	}
 	
@@ -173,6 +195,7 @@
 		else if ( $('number'+n+'').innerHTML === "○" ) {$('number'+n+'').innerHTML = "●"; $('number'+f+'').innerHTML = "○";}
 		else if ( $('number'+n+'').innerHTML === "●" ) {$('number'+n+'').innerHTML = "△"; $('number'+f+'').innerHTML = "△";}
 		else if ( $('number'+n+'').innerHTML === "△" ) {$('number'+n+'').innerHTML = "＿" ; $('number'+f+'').innerHTML = "＿";}
+		wl_records();
 		return false
 	}
 	
