@@ -24,24 +24,24 @@
 		slash	= "│／";
 	var slash_count;
 	//
-	var league_hyou = ""; //リーグ表大元
-	var i,j,k;
+	var league_table = ""; //リーグ表
 	var members = [];
+	var i,j,k;
 	var id_count = 0,c_count = 0;
 	var ninzu;
 
 	//----------------------------
-	//小物
+	//よくつかう小物
 	//----------------------------
 	
 	function $(id) {
 		return document.getElementById(id);
 	}
-	function c$(id) {
-		return document.getElementByClassName(id);
+	function c$(cls) {
+		return document.getElementByClassName(cls);
 	}
 	function br() {
-		league_hyou += "<br />";
+		league_table += "<br />";
 		return;
 	}
 	
@@ -73,7 +73,6 @@
     
     function htmlspecialchars(sentence){
 		n = sentence.replace(/<|>|&|\"/gi,"");
-
 		return n;
 	}
 
@@ -83,20 +82,20 @@
 
 	function league_init() {//リーグ表を作る
 		ninzu = members.length;
-		league_hyou = "";
+		league_table = "";
 		slash_count = ninzu - 1;
 		id_count = 1;
 
 		for( j = 0 ; j < 4 ; j++ ){
 
 			for( i = 0 ; i < ninzu ; i++){
-				league_hyou += keisen1[j] ;
+				league_table += keisen1[j] ;
 			}
 			
-			if (j == 0) {league_hyou += "┐";}
-			if (j == 1) {league_hyou += "├───┬────";}
-			if (j == 2) {league_hyou += "│勝－負│＝名前＝";}
-			if (j == 3) {league_hyou += "┼───┼────";}
+			if (j === 0) {league_table += "┐";}
+			if (j === 1) {league_table += "├───┬────";}
+			if (j === 2) {league_table += "│勝－負│＝名前＝";}
+			if (j === 3) {league_table += "┼───┼────";}
 			br();
 		}
 		
@@ -105,35 +104,35 @@
 			for ( j = 0 ; j < 2 ; j++){
 				for ( k = 0 ; k < ninzu ; k++){
 					
-					if ( j == 0 && k == slash_count ){
-						league_hyou += slash;
-						league_hyou += '<a id="number' +id_count+ '"></a>' 
+					if ( j === 0 && k === slash_count ){
+						league_table += slash;
+						league_table += '<a id="number' +id_count+ '"></a>' 
 						slash_count -= 1;
 						id_count += 1;
 						c_count -= ninzu;
 
 					}else{
 						if ( j === 0 ){
-							league_hyou += "│";
-							league_hyou += '<a id="number' +id_count+ '" class="'+c_count+'" onclick="vic_or_def('+id_count+')">';
-							league_hyou += "＿";
-							league_hyou += "</a>";
+							league_table += "│";
+							league_table += '<a id="number' +id_count+ '" class="'+c_count+'" onclick="vic_or_def('+id_count+')">';
+							league_table += "＿";
+							league_table += "</a>";
 							id_count += 1;
 							c_count -= ninzu;
 
 
 						}
 						if ( j === 1){
-							league_hyou += keisen2[j];
+							league_table += keisen2[j];
 						}
 					}
 
 				}
-				if ( j == 0 ) {
-					league_hyou += "│"+'<span id="katisu'+i+'">'+"＿"+"</span>"+"－"+'<span id="makesu'+i+'">'+"＿"+"</span>"+"│namae";
+				if ( j === 0 ) {
+					league_table += "│"+'<span id="katisu'+i+'">'+"＿"+"</span>"+"－"+'<span id="makesu'+i+'">'+"＿"+"</span>"+"│namae";
 					
 				}
-				if ( j == 1 ) {league_hyou += keisen3;}
+				if ( j === 1 ) {league_table += keisen3;}
 				
 				br();
 			}
@@ -143,9 +142,9 @@
 	function name_replace() {//名前を追加（置換）
 
 		for ( i = 0 ; i < ninzu ; i++){
-			league_hyou = league_hyou.replace(/namae/i,members[i]);			
-			league_hyou = league_hyou.replace(/itimojime/i,getByte(members[ninzu - i -1].slice(0,1)));
-			league_hyou = league_hyou.replace(/nimojime/i,getByte(members[ninzu - i -1].slice(1,2)));
+			league_table = league_table.replace(/namae/i,members[i]);			
+			league_table = league_table.replace(/itimojime/i,getByte(members[ninzu - i -1].slice(0,1)));
+			league_table = league_table.replace(/nimojime/i,getByte(members[ninzu - i -1].slice(1,2)));
 		}
 		
 	}
@@ -153,7 +152,7 @@
 	//半角文字列なら半角スペースを追加（ズレ対策）
 	function getByte(word) {//http://www.openspc2.org/reibun/javascript/string/026/
 		n = escape(word);
-		if ( n.length < 4 || word == " "){
+		if ( n.length < 4 || word === " "){
 			return word + "&nbsp;";
 		}
 		else{
@@ -182,7 +181,7 @@
 
 	
 	function draw(){
-		$('area').innerHTML = league_hyou;
+		$('area').innerHTML = league_table;
 	}
 	
 
